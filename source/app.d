@@ -13,19 +13,19 @@ int main(string[] args)
     auto window = SDL_CreateWindow("DGame", SDL_WINDOWPOS_UNDEFINED,
                                    SDL_WINDOWPOS_UNDEFINED, 800, 600,
                                    SDL_WINDOW_OPENGL);
-    auto renderer = SDL_CreateRenderer(window, -1, 0);
-    auto context = SDL_GL_CreateContext(window);
+    auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     /* clear the screen, i want it to be black */
-    glClearColor(0 ,0 ,0 ,1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
     /* draw some random rect */
-    SDL_Rect *r = new SDL_Rect(0, 0, 10, 10);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_Rect *r = new SDL_Rect(10, 10, 100, 100);
     SDL_RenderFillRect(renderer, r);
 
     /* swap buffers */
-    SDL_GL_SwapWindow(window);
+    SDL_RenderPresent(renderer);
 
     /* wait briefly to inspect the results */
     SDL_Delay(1000);
