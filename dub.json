@@ -4,6 +4,7 @@
 	"copyright": "Copyright © 2014, sulami",
 	"authors": ["sulami"],
 	"dependencies": {
+		"derelict-sdl2": "~master",
 		"derelict-gl3": "~master",
 	}
 }
