@@ -15,20 +15,30 @@ int main(string[] args)
                                    SDL_WINDOW_OPENGL);
     auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    /* clear the screen, i want it to be black */
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    int x, y;
 
-    /* draw some random rect */
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_Rect *r = new SDL_Rect(10, 10, 100, 100);
-    SDL_RenderFillRect(renderer, r);
+    /* do stuff until we kill the window */
+    while (true) {
+        SDL_Event e;
+        if (SDL_PollEvent(&e))
+            if (e.type == SDL_QUIT)
+                break;
 
-    /* swap buffers */
-    SDL_RenderPresent(renderer);
+        /* clear the screen, i want it to be black */
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
 
-    /* wait briefly to inspect the results */
-    SDL_Delay(1000);
+        /* draw some random rect */
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_Rect *r = new SDL_Rect(x++, y++, 100, 100);
+        SDL_RenderFillRect(renderer, r);
+
+        /* swap buffers */
+        SDL_RenderPresent(renderer);
+
+        /* wait a little bit before the next loop, we are bound to fps */
+        SDL_Delay(10);
+    }
 
     /* clean up */
     SDL_Quit();
