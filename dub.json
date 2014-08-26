@@ -1,0 +1,9 @@
+{
+	"name": "dgame",
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2014, sulami",
+	"authors": ["sulami"],
+	"dependencies": {
+		"derelict-gl3": "~master",
+	}
+}
