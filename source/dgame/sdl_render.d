@@ -2,6 +2,29 @@ module sdl_render;
 
 import derelict.sdl2.sdl;
 
+class RenderScreen
+{
+    /*
+     * Screen composite class to manage all window/renderer global stuff and
+     * enable easy access to properties
+     */
+
+    SDL_Window *win;
+    SDL_Renderer *ren;
+    int w, h;
+
+    this (const char *name, int x, int y, int w, int h, uint wflags,
+          uint rflags)
+    {
+        this.w = w;
+        this.h = h;
+        this.win = SDL_CreateWindow(name, x >= 0 ? x : SDL_WINDOWPOS_UNDEFINED,
+                                    y >= 0 ? y : SDL_WINDOWPOS_UNDEFINED, w, h,
+                                    wflags);
+        this.ren = SDL_CreateRenderer(this.win, -1, rflags);
+    }
+}
+
 class RenderObject
 {
     /*
