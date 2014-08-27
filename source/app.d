@@ -13,14 +13,17 @@ int main(string[] args)
 
     /* create a window and a renderer to use */
     RenderScreen scrn = new RenderScreen("DGame", -1, -1, 800, 600,
-                                        SDL_WINDOW_OPENGL,
-                                        SDL_RENDERER_ACCELERATED,
-                                        0, 0, 0, 255);
+                                         SDL_WINDOW_OPENGL,
+                                         SDL_RENDERER_ACCELERATED,
+                                         0, 0, 0, 255);
 
     /* draw some random objects */
     RenderRect rect = new RenderRect(scrn, 10, 10, 50, 50, 255, 0, 0, 255);
-    RenderPoint point = new RenderPoint(scrn, 5, 5, 0, 255, 0, 255);
-    RenderLine line = new RenderLine(scrn, 10, 10, 50, 50, 0, 0, 255, 255);
+    RenderPoint point = new RenderPoint(scrn, scrn.w / 2, scrn.h / 2, 0, 255,
+                                        0, 255);
+
+    ulong fps = 0;
+    uint cur_time = 0, diff_time = 0, last_time = 0;
 
     /* start reacting to keyboard events */
     SDL_StartTextInput();
@@ -56,6 +59,17 @@ int main(string[] args)
                         break;
                 }
             }
+        }
+
+        /* measure fps */
+        fps++;
+        cur_time = SDL_GetTicks();
+        diff_time += cur_time - last_time;
+        last_time = cur_time;
+        if (diff_time >= 1000) {
+            diff_time -= 1000;
+            writeln("fps: ", fps);
+            fps = 0;
         }
 
         /* clear the screen, re-render our objects and swap buffers */
