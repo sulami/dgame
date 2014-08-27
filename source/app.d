@@ -22,23 +22,47 @@ int main(string[] args)
     RenderPoint point = new RenderPoint(scrn, 5, 5, 0, 255, 0, 255);
     RenderLine line = new RenderLine(scrn, 10, 10, 50, 50, 0, 0, 255, 255);
 
+    /* start reacting to keyboard events */
+    SDL_StartTextInput();
+
     /* do stuff until we kill the window */
     while (true) {
         SDL_Event e;
-        if (SDL_PollEvent(&e))
+        if (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT)
-                break;
+                goto exit;
+            if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
 
-        /* move the rect */
-        rect.move(rect.x + 1, rect.y + 1);
+                    /* move the rect */
+                    case SDLK_RIGHT:
+                        rect.move(rect.x + 10, rect.y);
+                        break;
+                    case SDLK_LEFT:
+                        rect.move(rect.x - 10, rect.y);
+                        break;
+                    case SDLK_UP:
+                        rect.move(rect.x, rect.y - 10);
+                        break;
+                    case SDLK_DOWN:
+                        rect.move(rect.x, rect.y + 10);
+                        break;
+
+                    /* quit */
+                    case SDLK_ESCAPE:
+                    case SDLK_q:
+                        goto exit;
+                    default:
+                        break;
+                }
+            }
+        }
 
         /* clear the screen, re-render our objects and swap buffers */
         scrn.render();
-
-        /* wait a little bit before the next loop, we are bound to fps */
-        SDL_Delay(10);
     }
 
+exit:
     /* clean up */
     SDL_Quit();
 
