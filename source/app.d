@@ -14,7 +14,8 @@ int main(string[] args)
     /* create a window and a renderer to use */
     RenderScreen scr = new RenderScreen("DGame", -1, -1, 800, 600,
                                         SDL_WINDOW_OPENGL,
-                                        SDL_RENDERER_ACCELERATED);
+                                        SDL_RENDERER_ACCELERATED,
+                                        0, 0, 0, 255);
 
     /* draw some random objects */
     RenderRect rect = new RenderRect(scr.ren, 10, 10, 50, 50, 255, 0, 0, 255);
@@ -29,7 +30,7 @@ int main(string[] args)
                 break;
 
         /* clear the screen, i want it to be black */
-        scr.clear(0, 0, 0, 255);
+        scr.clear();
 
         /* rerender our objects to keep them on the screen */
         rect.render();

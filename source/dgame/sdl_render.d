@@ -12,16 +12,28 @@ class RenderScreen
     SDL_Window *win;
     SDL_Renderer *ren;
     int w, h;
+    ubyte r, g, b, a;
 
     this (const char *name, int x, int y, int w, int h, uint wflags,
-          uint rflags)
+          uint rflags, ubyte r, ubyte g, ubyte b, ubyte a)
     {
         this.w = w;
         this.h = h;
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+
         this.win = SDL_CreateWindow(name, x >= 0 ? x : SDL_WINDOWPOS_UNDEFINED,
                                     y >= 0 ? y : SDL_WINDOWPOS_UNDEFINED, w, h,
                                     wflags);
         this.ren = SDL_CreateRenderer(this.win, -1, rflags);
+    }
+
+    void clear()
+    {
+        SDL_SetRenderDrawColor(this.ren, this.r, this.g, this.b, this.a);
+        SDL_RenderClear(this.ren);
     }
 
     void clear(ubyte r, ubyte g, ubyte b, ubyte a)
@@ -154,6 +166,21 @@ class RenderLine : RenderObject
         this.x2 = x2;
         this.y2 = y2;
         this.render();
+    }
+}
+
+class RenderTexture
+{
+    SDL_Renderer *ren;
+    SDL_Texture *tex;
+    int w, h;
+
+    this(SDL_Renderer *ren, uint format, int access, int w, int h)
+    {
+        this.ren = ren;
+        this.w = w;
+        this.h = h;
+        this.tex = SDL_CreateTexture(this.ren, format, access, w, h);
     }
 }
 
