@@ -29,8 +29,7 @@ int main(string[] args)
                 break;
 
         /* clear the screen, i want it to be black */
-        SDL_SetRenderDrawColor(scr.ren, 0, 0, 0, 255);
-        SDL_RenderClear(scr.ren);
+        scr.clear(0, 0, 0, 255);
 
         /* rerender our objects to keep them on the screen */
         rect.render();
@@ -38,7 +37,7 @@ int main(string[] args)
         line.render();
 
         /* swap buffers */
-        SDL_RenderPresent(scr.ren);
+        scr.swap();
 
         /* wait a little bit before the next loop, we are bound to fps */
         SDL_Delay(10);

@@ -23,6 +23,17 @@ class RenderScreen
                                     wflags);
         this.ren = SDL_CreateRenderer(this.win, -1, rflags);
     }
+
+    void clear(ubyte r, ubyte g, ubyte b, ubyte a)
+    {
+        SDL_SetRenderDrawColor(this.ren, r, g, b, a);
+        SDL_RenderClear(this.ren);
+    }
+
+    void swap()
+    {
+        SDL_RenderPresent(this.ren);
+    }
 }
 
 class RenderObject
