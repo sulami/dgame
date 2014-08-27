@@ -19,8 +19,10 @@ int main(string[] args)
                                    SDL_WINDOW_OPENGL);
     auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    /* draw some random rect */
+    /* draw some random objects */
     RenderRect rect = new RenderRect(renderer, 10, 10, 50, 50, 255, 0, 0, 255);
+    RenderPoint point = new RenderPoint(renderer, 5, 5, 0, 255, 0, 255);
+    RenderLine line = new RenderLine(renderer, 10, 10, 50, 50, 0, 0, 255, 255);
 
     /* do stuff until we kill the window */
     while (true) {
@@ -33,8 +35,10 @@ int main(string[] args)
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        /* move out rect */
-        rect.move(rect.x + 1, rect.y + 1);
+        /* rerender out object to keep them on the screen */
+        rect.render();
+        point.render();
+        line.render();
 
         /* swap buffers */
         SDL_RenderPresent(renderer);
