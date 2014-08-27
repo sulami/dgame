@@ -44,11 +44,11 @@ class RenderObject
      */
 
     ubyte r, g, b, a;
-    SDL_Renderer *renderer;
+    SDL_Renderer *ren;
 
-    this(SDL_Renderer *renderer, ubyte r, ubyte g, ubyte b, ubyte a)
+    this(SDL_Renderer *ren, ubyte r, ubyte g, ubyte b, ubyte a)
     {
-        this.renderer = renderer;
+        this.ren = ren;
         this.r = r;
         this.g = g;
         this.b = b;
@@ -57,7 +57,7 @@ class RenderObject
 
     void render()
     {
-        SDL_SetRenderDrawColor(this.renderer, this.r, this.g, this.b, this.a);
+        SDL_SetRenderDrawColor(this.ren, this.r, this.g, this.b, this.a);
     }
 }
 
@@ -66,10 +66,10 @@ class RenderRect : RenderObject
     int x, y;
     uint w, h;
 
-    this(SDL_Renderer *renderer, int x, int y, uint w, uint h, ubyte r,
-         ubyte g, ubyte b, ubyte a)
+    this(SDL_Renderer *ren, int x, int y, uint w, uint h, ubyte r, ubyte g,
+         ubyte b, ubyte a)
     {
-        super(renderer, r, g, b, a);
+        super(ren, r, g, b, a);
         this.x = x;
         this.y = y;
         this.w = w;
@@ -81,7 +81,7 @@ class RenderRect : RenderObject
     {
         super.render();
         SDL_Rect *rect = new SDL_Rect(this.x, this.y, this.w, this.h);
-        SDL_RenderFillRect(this.renderer, rect);
+        SDL_RenderFillRect(this.ren, rect);
     }
 
     void move(int x, int y)
@@ -103,10 +103,9 @@ class RenderPoint : RenderObject
 {
     int x, y;
 
-    this(SDL_Renderer *renderer, int x, int y, ubyte r, ubyte g, ubyte b,
-         ubyte a)
+    this(SDL_Renderer *ren, int x, int y, ubyte r, ubyte g, ubyte b, ubyte a)
     {
-        super(renderer, r, g, b, a);
+        super(ren, r, g, b, a);
         this.x = x;
         this.y = y;
         this.render();
@@ -115,7 +114,7 @@ class RenderPoint : RenderObject
     override void render()
     {
         super.render();
-        SDL_RenderDrawPoint(this.renderer, this.x, this.y);
+        SDL_RenderDrawPoint(this.ren, this.x, this.y);
     }
 
     void move(int x, int y)
@@ -131,10 +130,10 @@ class RenderLine : RenderObject
 
     int x1, y1, x2, y2;
 
-    this(SDL_Renderer *renderer, int x1, int y1, int x2, int y2, ubyte r,
-         ubyte g, ubyte b, ubyte a)
+    this(SDL_Renderer *ren, int x1, int y1, int x2, int y2, ubyte r, ubyte g,
+         ubyte b, ubyte a)
     {
-        super(renderer, r, g, b, a);
+        super(ren, r, g, b, a);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -145,7 +144,7 @@ class RenderLine : RenderObject
     override void render()
     {
         super.render();
-        SDL_RenderDrawLine(this.renderer, this.x1, this.y1, this.x2, this.y2);
+        SDL_RenderDrawLine(this.ren, this.x1, this.y1, this.x2, this.y2);
     }
 
     void move(int x1, int y1, int x2, int y2)
