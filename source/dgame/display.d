@@ -5,7 +5,6 @@ import std.stdio;
 
 import derelict.sdl2.sdl;
 import derelict.opengl3.gl3;
-import derelict.opengl3.gl;
 
 import program;
 import shader;
@@ -80,7 +79,8 @@ class Display
 
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, (g_vertex_buffer_data).sizeof,
+        glBufferData(GL_ARRAY_BUFFER,
+                     g_vertex_buffer_data.length * float.sizeof,
                      g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
     }
 
