@@ -1,5 +1,8 @@
 module display;
 
+import std.math;
+import std.stdio;
+
 import derelict.sdl2.sdl;
 import derelict.opengl3.gl3;
 import derelict.opengl3.gl;
@@ -20,6 +23,9 @@ class Display
     Program program;
     GLint timeLoc;
     double time;
+    GLuint VertexArrayID;
+    GLuint vertexbuffer;
+    GLfloat g_vertex_buffer_data[];
 
     this()
     {
@@ -36,16 +42,26 @@ class Display
 
         setupSDL();
         DerelictGL3.reload();
+        setupGL();
         setupShaders();
+
+        /* DEBUG */
+        int major, minor;
+        SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
+        SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
+        writefln("Using OpenGL %s.%s", major, minor);
     }
 
     private void setupSDL()
     {
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, bitsPerPixel);
 
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, bitsPerPixel);
 
         window = SDL_CreateWindow("DGame", SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED, width, height,
@@ -55,6 +71,17 @@ class Display
 
     private void setupGL()
     {
+        glGenVertexArrays(1, &VertexArrayID);
+        glBindVertexArray(VertexArrayID);
+
+        g_vertex_buffer_data = [ -1.0f, -1.0f,  0.0f,
+                                  1.0f, -1.0f,  0.0f,
+                                  0.0f,  1.0f,  0.0f ];
+
+        glGenBuffers(1, &vertexbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glBufferData(GL_ARRAY_BUFFER, (g_vertex_buffer_data).sizeof,
+                     g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
     }
 
     private void setupShaders()
@@ -91,15 +118,11 @@ class Display
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /* crash time... */
-        /* glBegin(GL_TRIANGLES); */
-        /* glColor3f (1, 0, 0); */
-        /* glVertex3f(-1, -1, -2); */
-        /* glColor3f (0, 1, 0); */
-        /* glVertex3f(1, -1, -2); */
-        /* glColor3f (0, 0, 1); */
-        /* glVertex3f(0, 1, -2); */
-        /* glEnd(); */
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDisableVertexAttribArray(0);
 
         SDL_GL_SwapWindow(window);
     }

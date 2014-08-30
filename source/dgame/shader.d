@@ -8,7 +8,7 @@ import derelict.opengl3.gl3;
 
 class Shader
 {
-    GLuint shader = 0;
+    GLuint shader;
 
     ~this()
     {
@@ -26,6 +26,11 @@ class Shader
             shader = glCreateShader(type);
             glShaderSource(shader, 1 ,&ptr, &len);
             glCompileShader(shader);
+
+            int result;
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+            if (!result)
+                writeln("Failed to compile shader: ", shader);
 
             return true;
         }
