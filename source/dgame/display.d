@@ -50,8 +50,6 @@ class Display
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
         writefln("Using OpenGL %s.%s", major, minor);
-
-        GLuint MatrixID = glGetUniformLocation(program.program, "MVP");
     }
 
     private void setupSDL()
@@ -74,8 +72,8 @@ class Display
     {
         glGenVertexArrays(1, &VertexArrayID);
         glBindVertexArray(VertexArrayID);
-
-        /* TODO: something */
+        glGenBuffers(1, &vertexbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     }
 
     private void setupShaders()
