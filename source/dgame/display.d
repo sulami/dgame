@@ -1,6 +1,5 @@
 module display;
 
-import std.math;
 import std.stdio;
 
 import derelict.sdl2.sdl;
@@ -14,9 +13,9 @@ class Display
     uint height;
     uint width;
     uint bitsPerPixel;
-    float fov;
-    float nearPlane;
-    float farPlane;
+    /* float fov; */
+    /* float nearPlane; */
+    /* float farPlane; */
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
@@ -33,9 +32,9 @@ class Display
         width = 800;
         height = 600;
         bitsPerPixel = 24;
-        fov = 90;
-        nearPlane = 0.1f;
-        farPlane = 100.0f;
+        /* fov = 90; */
+        /* nearPlane = 0.1f; */
+        /* farPlane = 100.0f; */
 
         DerelictSDL2.load();
         DerelictGL3.load();
