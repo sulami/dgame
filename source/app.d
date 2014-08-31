@@ -2,42 +2,25 @@ import core.time;
 import std.stdio;
 
 import derelict.opengl3.gl3;
-import derelict.sdl2.sdl;
 
 import display;
 
 int main(string[] args)
 {
-
-    /* fps stuff */
-    ulong fps = 0;
-    uint cur_time = 0, diff_time = 0, last_time = 0;
-
-    /* start reacting to keyboard events */
-    /* SDL_StartTextInput(); */
-
     Display display = new Display();
 
-    TickDuration lastTime = TickDuration.currSystemTick();
-    TickDuration newTime, dt;
-
-    /* do stuff until we kill the window */
+    /* main loop */
     while (display.event()) {
-        /* measure fps */
-        fps++;
-        cur_time = SDL_GetTicks();
-        diff_time += cur_time - last_time;
-        last_time = cur_time;
-        if (diff_time >= 1000) {
-            diff_time -= 1000;
-            writeln("fps: ", fps);
-            fps = 0;
-        }
+        display.g_vertex_buffer_data = [ -1.0f, -1.0f,  0.0f,
+                                          1.0f, -1.0f,  0.0f,
+                                          0.0f,  1.0f,  0.0f ];
 
-        newTime = TickDuration.currSystemTick();
-        dt = newTime - lastTime;
-        lastTime = newTime;
-        display.update(dt.length / cast(double)TickDuration.ticksPerSec);
+        glGenBuffers(1, &display.vertexbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, display.vertexbuffer);
+        glBufferData(GL_ARRAY_BUFFER,
+                     display.g_vertex_buffer_data.length * GLfloat.sizeof,
+                     display.g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
+
         display.render();
     }
 

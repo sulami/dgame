@@ -20,11 +20,13 @@ class Display
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
-    GLint timeLoc;
-    double time;
     GLuint VertexArrayID;
     GLuint vertexbuffer;
     GLfloat g_vertex_buffer_data[];
+
+    /* fps stuff */
+    ulong fps = 0;
+    uint cur_time = 0, diff_time = 0, last_time = 0;
 
     this()
     {
@@ -34,7 +36,6 @@ class Display
         fov = 90;
         nearPlane = 0.1f;
         farPlane = 100.0f;
-        time = 0;
 
         DerelictSDL2.load();
         DerelictGL3.load();
@@ -49,11 +50,13 @@ class Display
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
         writefln("Using OpenGL %s.%s", major, minor);
+
+        GLuint MatrixID = glGetUniformLocation(program.program, "MVP");
     }
 
     private void setupSDL()
     {
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+        SDL_Init(SDL_INIT_VIDEO);
 
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -72,15 +75,7 @@ class Display
         glGenVertexArrays(1, &VertexArrayID);
         glBindVertexArray(VertexArrayID);
 
-        g_vertex_buffer_data = [ -1.0f, -1.0f,  0.0f,
-                                  1.0f, -1.0f,  0.0f,
-                                  0.0f,  1.0f,  0.0f ];
-
-        glGenBuffers(1, &vertexbuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER,
-                     g_vertex_buffer_data.length * GLfloat.sizeof,
-                     g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
+        /* TODO: something */
     }
 
     private void setupShaders()
@@ -96,21 +91,26 @@ class Display
         program.attachShader(fragmentShader);
         program.link();
         program.use();
-
-        timeLoc = program.getUniformLocation("time");
     }
 
-    static void cleanup()
+    private void measureFPS()
+    {
+        fps++;
+        cur_time = SDL_GetTicks();
+        diff_time += cur_time - last_time;
+        last_time = cur_time;
+        if (diff_time >= 1000) {
+            diff_time -= 1000;
+            writeln("fps: ", fps);
+            fps = 0;
+        }
+    }
+
+    void cleanup()
     {
         SDL_Quit();
         DerelictGL3.unload();
         DerelictSDL2.unload();
-    }
-
-    void update(double dt)
-    {
-        time += dt;
-        glUniform1f(timeLoc, time);
     }
 
     void render()
@@ -124,6 +124,8 @@ class Display
         glDisableVertexAttribArray(0);
 
         SDL_GL_SwapWindow(window);
+
+        measureFPS();
     }
 
     bool event()
