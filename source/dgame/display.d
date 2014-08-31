@@ -53,7 +53,6 @@ class Display
 
     private void setupSDL()
     {
-
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -80,7 +79,7 @@ class Display
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER,
-                     g_vertex_buffer_data.length * float.sizeof,
+                     g_vertex_buffer_data.length * GLfloat.sizeof,
                      g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
     }
 
