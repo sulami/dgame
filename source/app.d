@@ -12,9 +12,10 @@ int main(string[] args)
     GLuint MatrixID = display.program.getUniformLocation("TMatrix");
 
     mat4 Model = mat4.identity();
-    mat4 Translation = mat4.identity();
-    Translation.scale(.3f, .3f, 1f);
-    mat4 TMatrix = Translation * Model;
+    mat4 Scale = mat4.identity.scale(0.5, 0.5, 0.5);
+    mat4 Rotation = mat4.xrotation(.5f);
+    mat4 Translation = mat4.translation(-0.5f, -0.5f, 1.0f);
+    mat4 TMatrix = Translation * Rotation * Scale * Model;
 
     display.g_vertex_buffer_data = [ -1.0f, -1.0f,  0.0f,
                                       1.0f, -1.0f,  0.0f,
@@ -26,7 +27,6 @@ int main(string[] args)
 
     /* main loop */
     while (display.event()) {
-        TMatrix = TMatrix.rotatez(.02f);
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &TMatrix[0][0]);
         display.render();
     }
