@@ -86,7 +86,6 @@ int main(string[] args)
     /* main loop */
     while (display.event()) {
         cube.rotate(0f, .05, 0f);
-        /* display.moveCamera(0f, -0.01f, 0f); */
         display.render();
     }
 

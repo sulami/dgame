@@ -1,7 +1,5 @@
 module entity;
 
-import std.stdio;
-
 import derelict.opengl3.gl3;
 import gl3n.linalg;
 
@@ -65,6 +63,16 @@ class Entity
         Model.rotatex(x);
         Model.rotatey(y);
         Model.rotatez(z);
+    }
+
+    void move(float x, float y, float z)
+    {
+        Model.translate(x, y, z);
+    }
+
+    void scale(float x, float y, float z)
+    {
+        Model.scale(x, y, z);
     }
 
     ~this()
