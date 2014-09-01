@@ -24,8 +24,8 @@ class Shader
         int result;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
         if (!result)
-            throw new Exception(
-                format("Failed to compile shader %s from %s", shader, path));
+            throw new Exception(format("Failed to compile shader %s from %s",
+                                       shader, path));
     }
 
     ~this()

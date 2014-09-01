@@ -27,8 +27,8 @@ class Entity
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER,
-                    g_vertex_buffer_data.length * GLfloat.sizeof,
-                    g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
+                     g_vertex_buffer_data.length * GLfloat.sizeof,
+                     g_vertex_buffer_data.ptr, GL_STATIC_DRAW);
 
         glGenBuffers(1, &colorbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -39,8 +39,8 @@ class Entity
     void render()
     {
         glBufferData(GL_ARRAY_BUFFER,
-                    g_color_buffer_data.length * GLfloat.sizeof,
-                    g_color_buffer_data.ptr, GL_STATIC_DRAW);
+                     g_color_buffer_data.length * GLfloat.sizeof,
+                     g_color_buffer_data.ptr, GL_STATIC_DRAW);
 
         MVP = display.Perspective * display.View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVP[0][0]);
