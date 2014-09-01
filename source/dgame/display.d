@@ -14,9 +14,10 @@ class Display
     uint height;
     uint width;
     uint bitsPerPixel;
-    /* float fov; */
-    /* float nearPlane; */
-    /* float farPlane; */
+    float fov;
+    float nearPlane;
+    float farPlane;
+    mat4 MVP;
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
@@ -34,9 +35,9 @@ class Display
         width = 800;
         height = 600;
         bitsPerPixel = 24;
-        /* fov = 90; */
-        /* nearPlane = 0.1f; */
-        /* farPlane = 100.0f; */
+        fov = 30;
+        nearPlane = 0.1f;
+        farPlane = 100.0f;
 
         DerelictSDL2.load();
         DerelictGL3.load();
@@ -122,12 +123,10 @@ class Display
         DerelictSDL2.unload();
     }
 
-    mat4 TMatrix;
-
     void render()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &TMatrix[0][0]);
+        glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVP[0][0]);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);

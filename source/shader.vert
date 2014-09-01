@@ -5,11 +5,11 @@ layout(location = 1) in vec3 vertexColor;
 
 out vec3 fragmentColor;
 
-uniform mat4 TMatrix;
+uniform mat4 MVP;
 
 void main()
 {
-    gl_Position = TMatrix * vec4(vertexPosition_modelspace,1.0);
+    gl_Position = MVP * vec4(vertexPosition_modelspace,1.0);
     fragmentColor = vertexColor;
 }
 

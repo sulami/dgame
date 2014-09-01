@@ -9,14 +9,15 @@ int main(string[] args)
 {
     Display display = new Display();
 
-    display.MatrixID = display.program.getUniformLocation("TMatrix");
+    display.MatrixID = display.program.getUniformLocation("MVP");
 
     mat4 Model = mat4.identity();
-    mat4 Scale = mat4.identity.scale(.3, .3, .3);
-    mat4 Rotation = mat4.xrotation(.4);
-    /* mat4 Translation = mat4.translation(-0.5f, -0.5f, 1.0f); */
-    mat4 Translation = mat4.identity();
-    display.TMatrix = Translation * Rotation * Scale * Model;
+    mat4 Perspective = mat4.perspective(display.width, display.height,
+                                        display.fov, display.nearPlane,
+                                        display.farPlane);
+    mat4 View = mat4.look_at(vec3( 4.0,  3.0, -3.0),
+                             vec3( 0.0,  0.0,  0.0),
+                             vec3( 0.0,  1.0,  0.0));
 
     display.g_vertex_buffer_data = [ -1.0f,-1.0f,-1.0f,
                                      -1.0f,-1.0f, 1.0f,
@@ -100,7 +101,8 @@ int main(string[] args)
 
     /* main loop */
     while (display.event()) {
-        display.TMatrix.rotatey(.05);
+        Model.rotatey(.05);
+        display.MVP = Perspective * View * Model;
         display.render();
     }
 
