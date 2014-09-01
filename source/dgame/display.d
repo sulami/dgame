@@ -41,8 +41,6 @@ class Display
         camPos = vec3(4f, 3f, -3f);
         viewPos = vec3(0f, 0f, 0f);
         camUp = vec3(0f, 1f, 0f);
-        Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
-        View = mat4.look_at(camPos, viewPos, camUp);
 
         DerelictSDL2.load();
         DerelictGL3.load();
@@ -128,8 +126,16 @@ class Display
         DerelictSDL2.unload();
     }
 
+    void moveCamera(float x, float y, float z)
+    {
+        camPos += vec3(x, y, z);
+    }
+
     void render()
     {
+        Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
+        View = mat4.look_at(camPos, viewPos, camUp);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVP[0][0]);
 

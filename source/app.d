@@ -96,6 +96,7 @@ int main(string[] args)
     /* main loop */
     while (display.event()) {
         Model.rotatey(.05);
+        display.moveCamera(0f, -0.01f, 0f);
         display.MVP = display.Perspective * display.View * Model;
         display.render();
     }
