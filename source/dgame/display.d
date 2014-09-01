@@ -4,6 +4,7 @@ import std.stdio;
 
 import derelict.sdl2.sdl;
 import derelict.opengl3.gl3;
+import gl3n.linalg;
 
 import program;
 import shader;
@@ -19,9 +20,10 @@ class Display
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
-    GLuint VertexArrayID;
-    GLuint vertexbuffer;
+    GLuint VertexArrayID, MatrixID;
+    GLuint vertexbuffer, colorbuffer;
     GLfloat g_vertex_buffer_data[];
+    GLfloat g_color_buffer_data[];
 
     /* fps stuff */
     ulong fps = 0;
@@ -69,10 +71,17 @@ class Display
 
     private void setupGL()
     {
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
         glGenVertexArrays(1, &VertexArrayID);
         glBindVertexArray(VertexArrayID);
+
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
+        glGenBuffers(1, &colorbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
     }
 
     private void setupShaders()
@@ -105,20 +114,33 @@ class Display
 
     void cleanup()
     {
+        glDeleteBuffers(1, &vertexbuffer);
+        glDeleteBuffers(1, &colorbuffer);
+
         SDL_Quit();
         DerelictGL3.unload();
         DerelictSDL2.unload();
     }
 
+    mat4 TMatrix;
+
     void render()
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &TMatrix[0][0]);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
+
+        glDrawArrays(GL_TRIANGLES, 0, 12*3);
+
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
 
         SDL_GL_SwapWindow(window);
 
