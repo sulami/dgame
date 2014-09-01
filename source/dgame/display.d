@@ -82,11 +82,10 @@ class Display
 
     private void setupShaders()
     {
-        Shader vertexShader = new Shader();
-        vertexShader.loadShader(GL_VERTEX_SHADER, "source/shader.vert");
-
-        Shader fragmentShader = new Shader();
-        fragmentShader.loadShader(GL_FRAGMENT_SHADER, "source/shader.frag");
+        Shader vertexShader = new Shader(GL_VERTEX_SHADER,
+                                         "source/shader.vert");
+        Shader fragmentShader = new Shader(GL_FRAGMENT_SHADER,
+                                           "source/shader.frag");
 
         program = new Program();
         program.attachShader(vertexShader);

@@ -11,12 +11,7 @@ class Shader
 {
     GLuint shader;
 
-    ~this()
-    {
-        glDeleteShader(shader);
-    }
-
-    void loadShader(GLenum type, string path)
+    this(GLenum type, string path)
     {
         string code = readText(path);
         const char *ptr = code.ptr;
@@ -31,6 +26,11 @@ class Shader
         if (!result)
             throw new Exception(
                 format("Failed to compile shader %s from %s", shader, path));
+    }
+
+    ~this()
+    {
+        glDeleteShader(shader);
     }
 }
 
