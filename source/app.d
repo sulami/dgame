@@ -82,10 +82,14 @@ int main(string[] args)
                              0.982f,  0.099f,  0.879f ];
 
     Entity cube = new Entity(display, cube_vertex, cube_color);
+    Entity cube2 = new Entity(display, cube_vertex, cube_color);
+
+    cube2.move(0f,-2.1,0f);
 
     /* main loop */
     while (display.event()) {
         cube.rotate(0f, .05, 0f);
+        cube2.rotate(0f, -.02, 0f);
         display.render();
     }
 

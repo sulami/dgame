@@ -32,15 +32,16 @@ class Entity
 
         glGenBuffers(1, &colorbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-        glBufferData(GL_ARRAY_BUFFER,
-                    g_color_buffer_data.length * GLfloat.sizeof,
-                    g_color_buffer_data.ptr, GL_STATIC_DRAW);
 
         d.addEntity(this);
     }
 
     void render()
     {
+        glBufferData(GL_ARRAY_BUFFER,
+                    g_color_buffer_data.length * GLfloat.sizeof,
+                    g_color_buffer_data.ptr, GL_STATIC_DRAW);
+
         MVP = display.Perspective * display.View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVP[0][0]);
 

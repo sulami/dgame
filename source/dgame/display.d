@@ -36,7 +36,7 @@ class Display
         fov = 45;
         nearPlane = 0.1f;
         farPlane = 100.0f;
-        camPos = vec3(4f, 3f, -3f);
+        camPos = vec3(4f, 2f, -8f);
         viewPos = vec3(0f, 0f, 0f);
         camUp = vec3(0f, 1f, 0f);
 
