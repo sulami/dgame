@@ -14,9 +14,9 @@ class Display
     uint height;
     uint width;
     uint bitsPerPixel;
-    float fov;
-    float nearPlane;
-    float farPlane;
+    float fov, nearPlane, farPlane;
+    vec3 camPos, viewPos, camUp;
+    mat4 Perspective, View;
     mat4 MVP;
     SDL_Window *window;
     SDL_GLContext context;
@@ -35,9 +35,14 @@ class Display
         width = 800;
         height = 600;
         bitsPerPixel = 24;
-        fov = 30;
+        fov = 45;
         nearPlane = 0.1f;
         farPlane = 100.0f;
+        camPos = vec3(4f, 3f, -3f);
+        viewPos = vec3(0f, 0f, 0f);
+        camUp = vec3(0f, 1f, 0f);
+        Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
+        View = mat4.look_at(camPos, viewPos, camUp);
 
         DerelictSDL2.load();
         DerelictGL3.load();
