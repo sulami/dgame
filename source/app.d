@@ -2,6 +2,7 @@ import derelict.opengl3.gl3;
 
 import display;
 import entity;
+import texture;
 
 int main(string[] args)
 {
@@ -83,6 +84,8 @@ int main(string[] args)
 
     Entity cube = new Entity(display, cube_vertex, cube_color);
     Entity cube2 = new Entity(display, cube_vertex, cube_color);
+
+    Texture t = new Texture("tex.bmp");
 
     cube2.move(0f,-2.1,0f);
 
