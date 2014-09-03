@@ -24,9 +24,10 @@ class Display
     Program program;
     Entity entities[];
 
-    /* fps stuff */
-    ulong fps = 0;
-    uint cur_time = 0, diff_time = 0, last_time = 0;
+    debug {
+        ulong fps = 0;
+        uint cur_time = 0, diff_time = 0, last_time = 0;
+    }
 
     this()
     {
@@ -40,6 +41,10 @@ class Display
         viewPos = vec3(0f, 0f, 0f);
         camUp = vec3(0f, 1f, 0f);
 
+        debug {
+            writeln("Initializing display...");
+        }
+
         DerelictSDL2.load();
         DerelictGL3.load();
 
@@ -48,15 +53,20 @@ class Display
         setupGL();
         setupShaders();
 
-        /* DEBUG */
-        int major, minor;
-        SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
-        SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
-        writefln("Using OpenGL %s.%s", major, minor);
+        debug {
+            int major, minor;
+            SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
+            SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &minor);
+            writefln("Using OpenGL %s.%s", major, minor);
+        }
     }
 
     private void setupSDL()
     {
+        debug {
+            writeln("Initializing SDL...");
+        }
+
         SDL_Init(SDL_INIT_VIDEO);
 
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -65,14 +75,26 @@ class Display
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, bitsPerPixel);
 
+        debug {
+            writeln("Creating Window...");
+        }
+
         window = SDL_CreateWindow("DGame", SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED, width, height,
                                   SDL_WINDOW_OPENGL);
+        debug {
+            writeln("Creating Context...");
+        }
+
         context = SDL_GL_CreateContext(window);
     }
 
     private void setupGL()
     {
+        debug {
+            writeln("Initializing OpenGL...");
+        }
+
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
@@ -82,10 +104,18 @@ class Display
 
     private void setupShaders()
     {
+        debug {
+            writeln("Initializing Shaders...");
+        }
+
         Shader vertexShader = new Shader(GL_VERTEX_SHADER,
                                          "source/shader.vert");
         Shader fragmentShader = new Shader(GL_FRAGMENT_SHADER,
                                            "source/shader.frag");
+
+        debug {
+            writeln("Initializing Program...");
+        }
 
         program = new Program();
         program.attachShader(vertexShader);
@@ -94,21 +124,27 @@ class Display
         program.use();
     }
 
-    private void measureFPS()
-    {
-        fps++;
-        cur_time = SDL_GetTicks();
-        diff_time += cur_time - last_time;
-        last_time = cur_time;
-        if (diff_time >= 1000) {
-            diff_time -= 1000;
-            writeln("fps: ", fps);
-            fps = 0;
+    debug {
+        private void measureFPS()
+        {
+            fps++;
+            cur_time = SDL_GetTicks();
+            diff_time += cur_time - last_time;
+            last_time = cur_time;
+            if (diff_time >= 1000) {
+                diff_time -= 1000;
+                writeln("fps: ", fps);
+                fps = 0;
+            }
         }
     }
 
     void cleanup()
     {
+        debug {
+            writeln("Cleaning up...");
+        }
+
         SDL_Quit();
         DerelictGL3.unload();
         DerelictSDL2.unload();
@@ -136,7 +172,9 @@ class Display
 
         SDL_GL_SwapWindow(window);
 
-        measureFPS();
+        debug {
+            measureFPS();
+        }
     }
 
     bool event()
