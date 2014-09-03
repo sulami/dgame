@@ -85,7 +85,7 @@ int main(string[] args)
     Entity cube = new Entity(display, cube_vertex, cube_color);
     Entity cube2 = new Entity(display, cube_vertex, cube_color);
 
-    Texture t = new Texture("tex.bmp");
+    Texture t = new Texture("tex.png");
 
     cube2.move(0f,-2.1,0f);
 

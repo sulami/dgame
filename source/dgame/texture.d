@@ -3,48 +3,79 @@ module texture;
 import core.memory;
 import std.mmfile;
 import std.stdio;
+import std.string;
 
 import derelict.opengl3.gl3;
 import derelict.sdl2.sdl;
+import derelict.sdl2.image;
 
 class Texture
 {
     GLuint textureID;
-    uint width, height;
-    ulong size;
+    GLsizei width, height;
+    GLint internal_format;
+    GLenum format, type;
+    void *data;
 
     this(string path)
     {
-        /* auto f = new MmFile(path); */
-        /* size = f.length; */
+        debug {
+            writefln("Loading texture %s...", path);
+        }
 
-        /* auto tb = cast(char *)GC.malloc(size, 0); */
-        /* if (tb is null) */
-        /*     throw new Exception("Error allocating texture buffer"); */
+        DerelictSDL2Image.load();
 
-        /* tb = cast(char *)f.opSlice(); */
+        SDL_Surface *flip(SDL_Surface *surface) {
+            SDL_Surface *result = SDL_CreateRGBSurface(surface.flags,
+                    surface.w, surface.h, surface.format.BytesPerPixel * 8,
+                    surface.format.Rmask, surface.format.Gmask,
+                    surface.format.Bmask, surface.format.Amask);
+
+            ubyte *pixels = cast(ubyte *)surface.pixels;
+            ubyte *rpixels = cast(ubyte *)result.pixels;
+            uint pitch = surface.pitch;
+            uint pxlength = pitch * surface.h;
+
+            assert(result != null);
+
+            for(uint line = 0; line < surface.h; ++line) {
+                uint pos = line * pitch;
+                rpixels[pos..pos + pitch] = pixels[(pxlength-pos) - pitch
+                                                    ..pxlength - pos];
+            }
+
+            return result;
+        }
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
 
-        /* auto surface = SDL_LoadBMP(cast(char *)path); */
-        auto surface = SDL_LoadBMP("/home/sulami/build/dgame/tex.bmp");
-        writeln(surface);
-        /* SDL_PixelFormat *format = surface.format; */
+        auto surface = IMG_Load(path.toStringz());
 
-        /* glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, */
-        /*              GL_UNSIGNED_BYTE, cast(void *)tb); */
+        if (surface.format.BytesPerPixel == 3)
+            internal_format = format = GL_RGB;
+        else if (surface.format.BytesPerPixel == 4)
+            internal_format = format = GL_RGBA;
+        else
+            throw new Exception("Pixel format not supported: ", path);
+
+
+        auto flipped = flip(surface);
+
+        data = flipped.pixels;
+        width = surface.w;
+        height= surface.h;
+
+        glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
+                     format, GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }
 
-    ~this()
-    {
-        /* GC.free(); */
+        SDL_FreeSurface(flipped);
     }
 }
 
