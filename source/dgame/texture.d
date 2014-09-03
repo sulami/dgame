@@ -20,7 +20,7 @@ class Texture
     this(string path)
     {
         debug {
-            writefln("Loading texture %s...", path);
+            writeln("Loading texture ", path);
         }
 
         DerelictSDL2Image.load();

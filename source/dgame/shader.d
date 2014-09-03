@@ -14,7 +14,7 @@ class Shader
     this(GLenum type, string path)
     {
         debug {
-            writefln("Loading shader %s...", path);
+            writeln("Loading shader ", path);
         }
 
         string code = readText(path);
@@ -22,7 +22,7 @@ class Shader
         int len = to!int(code.length);
 
         debug {
-            writefln("Compiling shader %s...", path);
+            writeln("Compiling shader ", path);
         }
 
         shader = glCreateShader(type);

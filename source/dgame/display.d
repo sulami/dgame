@@ -42,7 +42,7 @@ class Display
         camUp = vec3(0f, 1f, 0f);
 
         debug {
-            writeln("Initializing display...");
+            writeln("Initializing display");
         }
 
         DerelictSDL2.load();
@@ -64,7 +64,7 @@ class Display
     private void setupSDL()
     {
         debug {
-            writeln("Initializing SDL...");
+            writeln("Initializing SDL");
         }
 
         SDL_Init(SDL_INIT_VIDEO);
@@ -76,14 +76,14 @@ class Display
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, bitsPerPixel);
 
         debug {
-            writeln("Creating Window...");
+            writeln("Creating window");
         }
 
         window = SDL_CreateWindow("DGame", SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED, width, height,
                                   SDL_WINDOW_OPENGL);
         debug {
-            writeln("Creating Context...");
+            writeln("Creating context");
         }
 
         context = SDL_GL_CreateContext(window);
@@ -92,7 +92,7 @@ class Display
     private void setupGL()
     {
         debug {
-            writeln("Initializing OpenGL...");
+            writeln("Initializing OpenGL");
         }
 
         glEnable(GL_DEPTH_TEST);
@@ -105,7 +105,7 @@ class Display
     private void setupShaders()
     {
         debug {
-            writeln("Initializing Shaders...");
+            writeln("Initializing shaders");
         }
 
         Shader vertexShader = new Shader(GL_VERTEX_SHADER,
@@ -114,7 +114,7 @@ class Display
                                            "source/shader.frag");
 
         debug {
-            writeln("Initializing Program...");
+            writeln("Initializing program");
         }
 
         program = new Program();
@@ -133,7 +133,7 @@ class Display
             last_time = cur_time;
             if (diff_time >= 1000) {
                 diff_time -= 1000;
-                writeln("fps: ", fps);
+                writeln("FPS: ", fps);
                 fps = 0;
             }
         }
@@ -142,7 +142,7 @@ class Display
     void cleanup()
     {
         debug {
-            writeln("Cleaning up...");
+            writeln("Cleaning up");
         }
 
         SDL_Quit();
