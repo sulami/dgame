@@ -6,7 +6,7 @@ int main(string[] args)
 {
     Display display = new Display();
 
-    Texture t = new Texture("tex.png");
+    Texture t = new Texture("wurfel.png");
     Texture t2 = new Texture("tex2.png");
 
     Entity cube = new Entity(display, t, "cube.obj");

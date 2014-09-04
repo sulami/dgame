@@ -60,6 +60,8 @@ class Display
         setupGL();
         setupShaders();
 
+        SDL_ShowCursor(0);
+
         debug {
             int major, minor;
             SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &major);
@@ -155,6 +157,8 @@ class Display
         debug {
             writeln("Cleaning up");
         }
+
+        SDL_ShowCursor(1);
 
         SDL_Quit();
         DerelictGL3.unload();
