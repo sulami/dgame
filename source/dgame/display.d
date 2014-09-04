@@ -104,6 +104,7 @@ class Display
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
+        glEnable(GL_CULL_FACE);
 
         glGenVertexArrays(1, &VertexArrayID);
         glBindVertexArray(VertexArrayID);
@@ -231,7 +232,6 @@ class Display
             camPos -= camRight * diff_time * speed;
         if (kb[SDL_SCANCODE_D])
             camPos += camRight * diff_time * speed;
-
 
         return true;
     }
