@@ -26,8 +26,8 @@ class Display
 
     debug {
         ulong fps = 0;
-        uint cur_time = 0, diff_time = 0, last_time = 0;
     }
+    uint cur_time = 0, diff_time = 0, last_time = 0;
 
     this()
     {
@@ -126,13 +126,13 @@ class Display
         program.use();
     }
 
-    debug {
-        private void measureFPS()
-        {
+    private void measureFPS()
+    {
+        cur_time = SDL_GetTicks();
+        diff_time += cur_time - last_time;
+        last_time = cur_time;
+        debug {
             fps++;
-            cur_time = SDL_GetTicks();
-            diff_time += cur_time - last_time;
-            last_time = cur_time;
             if (diff_time >= 1000) {
                 diff_time -= 1000;
                 writeln("FPS: ", fps);
@@ -174,9 +174,7 @@ class Display
 
         SDL_GL_SwapWindow(window);
 
-        debug {
-            measureFPS();
-        }
+        measureFPS();
     }
 
     bool event()
