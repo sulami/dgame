@@ -119,7 +119,7 @@ class Entity
 
         glEnableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
 
         glDrawArrays(GL_TRIANGLES, 0, cast(int)vertexBuffer.length);
 
