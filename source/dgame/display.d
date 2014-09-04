@@ -12,10 +12,11 @@ import shader;
 
 class Display
 {
-    uint height;
-    uint width;
+    int width, height;
     uint bitsPerPixel;
     float fov, nearPlane, farPlane;
+    int xpos, ypos;
+    float hor, ver, speed, mspeed;
     vec3 camPos, viewPos, camUp;
     mat4 Perspective, View;
     GLuint VertexArrayID;
@@ -31,13 +32,17 @@ class Display
 
     this()
     {
-        width = 800;
-        height = 600;
+        width = 1024;
+        height = 768;
         bitsPerPixel = 24;
-        fov = 45;
+        fov = 45f;
         nearPlane = 0.1f;
         farPlane = 100.0f;
-        camPos = vec3(4f, 2f, -8f);
+        hor = 3.14f;
+        ver = 0f;
+        speed = 10f;
+        mspeed = 0.0005f;
+        camPos = vec3(0f, 0f, 8f);
         viewPos = vec3(0f, 0f, 0f);
         camUp = vec3(0f, 1f, 0f);
 
@@ -157,15 +162,24 @@ class Display
         entities ~= e;
     }
 
-    void moveCamera(float x, float y, float z)
+    void moveCamera()
     {
-        camPos += vec3(x, y, z);
+        SDL_GetMouseState(&xpos, &ypos);
+        SDL_WarpMouseInWindow(window, width / 2, height / 2);
+
+        hor += mspeed * ((width / 2) - xpos);
+        ver += mspeed * ((height / 2) - ypos);
+        viewPos = vec3(cos(ver) * sin(hor),
+                       sin(ver),
+                       cos(ver) * cos(hor));
     }
 
     void render()
     {
+        measureFPS();
+
         Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
-        View = mat4.look_at(camPos, viewPos, camUp);
+        View = mat4.look_at(camPos, camPos + viewPos, camUp);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -173,8 +187,6 @@ class Display
             ent.render();
 
         SDL_GL_SwapWindow(window);
-
-        measureFPS();
     }
 
     bool event()
@@ -206,6 +218,10 @@ class Display
                         default:
                             break;
                     }
+                    break;
+
+                case SDL_MOUSEMOTION:
+                    moveCamera();
                     break;
 
                 default:
