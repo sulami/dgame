@@ -45,8 +45,9 @@ class Display
         speed = 10f;
         mspeed = 0.005f;
         camPos = vec3(0f, 0f, 8f);
-        viewPos = vec3(0f, 0f, 0f);
-        camUp = vec3(0f, 1f, 0f);
+        viewPos = vec3(cos(ver) * sin(hor), sin(ver), cos(ver) * cos(hor));
+        camRight = vec3(sin(hor - 3.14/2f), 0, cos(hor - 3.14/2f));
+        camUp = cross(camRight, viewPos);
 
         debug {
             writeln("Initializing display");
