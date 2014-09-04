@@ -187,8 +187,25 @@ class Display
                     return false;
 
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_q)
-                        return false;
+                    switch (event.key.keysym.sym) {
+                        /* quit */
+                        case SDLK_ESCAPE:
+                        case SDLK_q:
+                            return false;
+
+                        /* movement */
+                        case SDLK_w:
+                            break;
+                        case SDLK_a:
+                            break;
+                        case SDLK_s:
+                            break;
+                        case SDLK_d:
+                            break;
+
+                        default:
+                            break;
+                    }
                     break;
 
                 default:
