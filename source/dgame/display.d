@@ -17,8 +17,9 @@ class Display
     float fov, nearPlane, farPlane;
     int xpos, ypos;
     float hor, ver, speed, mspeed;
-    vec3 camPos, viewPos, camUp;
+    vec3 camPos, viewPos, camRight, camUp;
     mat4 Perspective, View;
+    ubyte *kb;
     GLuint VertexArrayID;
     SDL_Window *window;
     SDL_GLContext context;
@@ -27,8 +28,9 @@ class Display
 
     debug {
         ulong fps = 0;
+        float fps_diff = 0f;
     }
-    uint cur_time = 0, diff_time = 0, last_time = 0;
+    float cur_time = 0f, diff_time = 0f, last_time = 0;
 
     this()
     {
@@ -41,7 +43,7 @@ class Display
         hor = 3.14f;
         ver = 0f;
         speed = 10f;
-        mspeed = 0.0005f;
+        mspeed = 0.005f;
         camPos = vec3(0f, 0f, 8f);
         viewPos = vec3(0f, 0f, 0f);
         camUp = vec3(0f, 1f, 0f);
@@ -134,12 +136,13 @@ class Display
     private void measureFPS()
     {
         cur_time = SDL_GetTicks();
-        diff_time += cur_time - last_time;
+        diff_time = (cur_time - last_time) / 1000f;
         last_time = cur_time;
         debug {
             fps++;
-            if (diff_time >= 1000) {
-                diff_time -= 1000;
+            fps_diff += diff_time;
+            if (fps_diff >= 1) {
+                fps_diff -= 1;
                 writeln("FPS: ", fps);
                 fps = 0;
             }
@@ -162,16 +165,16 @@ class Display
         entities ~= e;
     }
 
-    void moveCamera()
+    void moveView()
     {
         SDL_GetMouseState(&xpos, &ypos);
         SDL_WarpMouseInWindow(window, width / 2, height / 2);
 
-        hor += mspeed * ((width / 2) - xpos);
-        ver += mspeed * ((height / 2) - ypos);
-        viewPos = vec3(cos(ver) * sin(hor),
-                       sin(ver),
-                       cos(ver) * cos(hor));
+        hor += mspeed * ((width / 2) - xpos) / 10;
+        ver += mspeed * ((height / 2) - ypos) / 10;
+        viewPos = vec3(cos(ver) * sin(hor), sin(ver), cos(ver) * cos(hor));
+        camRight = vec3(sin(hor - 3.14/2f), 0, cos(hor - 3.14/2f));
+        camUp = cross(camRight, viewPos);
     }
 
     void render()
@@ -205,29 +208,30 @@ class Display
                         case SDLK_q:
                             return false;
 
-                        /* movement */
-                        case SDLK_w:
-                            break;
-                        case SDLK_a:
-                            break;
-                        case SDLK_s:
-                            break;
-                        case SDLK_d:
-                            break;
-
                         default:
                             break;
                     }
                     break;
 
                 case SDL_MOUSEMOTION:
-                    moveCamera();
+                    moveView();
                     break;
 
                 default:
                     break;
             }
         }
+
+        kb = SDL_GetKeyboardState(null);
+        if (kb[SDL_SCANCODE_W])
+            camPos += viewPos * diff_time * speed;
+        if (kb[SDL_SCANCODE_S])
+            camPos -= viewPos * diff_time * speed;
+        if (kb[SDL_SCANCODE_A])
+            camPos -= camRight * diff_time * speed;
+        if (kb[SDL_SCANCODE_D])
+            camPos += camRight * diff_time * speed;
+
 
         return true;
     }
