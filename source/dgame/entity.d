@@ -39,10 +39,6 @@ class Entity
         d.addEntity(this);
     }
 
-    void addTexture(Texture t)
-    {
-    }
-
     void render()
     {
         glBufferData(GL_ARRAY_BUFFER,
