@@ -32,12 +32,12 @@ class Display
     }
     float cur_time = 0f, diff_time = 0f, last_time = 0;
 
-    this()
+    this(int w, int h, float f)
     {
-        width = 1024;
-        height = 768;
+        width = w;
+        height = h;
         bitsPerPixel = 24;
-        fov = 45f;
+        fov = f;
         nearPlane = 0.1f;
         farPlane = 100.0f;
         hor = 3.14f;
