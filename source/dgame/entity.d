@@ -45,6 +45,10 @@ class Entity
 
     private void loadObj(string path)
     {
+        debug {
+            writeln("Loading obj file " ~ path);
+        }
+
         string text[];
         uint vertexIndices[];
         uint uvIndices[];

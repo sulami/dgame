@@ -120,11 +120,9 @@ class Display
         }
 
         Shader vertexShader = new Shader(GL_VERTEX_SHADER,
-                                    /* "source/shaders/vertex_solid.glsl"); */
-                                    "source/shaders/vertex_textured.glsl");
+                                    "source/shaders/vertex.glsl");
         Shader fragmentShader = new Shader(GL_FRAGMENT_SHADER,
-                                    /* "source/shaders/fragment_solid.glsl"); */
-                                    "source/shaders/fragment_textured.glsl");
+                                    "source/shaders/fragment.glsl");
 
         debug {
             writeln("Initializing program");
