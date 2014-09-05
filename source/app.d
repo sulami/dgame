@@ -1,16 +1,12 @@
 import display;
 import entity;
-import texture;
 
 int main(string[] args)
 {
     Display display = new Display();
 
-    Texture t = new Texture("wurfel.png");
-    Texture t2 = new Texture("tex2.png");
-
-    Entity cube = new Entity(display, t, "cube.obj");
-    Entity cube2 = new Entity(display, t2, "cube.obj");
+    Entity cube = new Entity(display, "cube.obj", "wurfel.png");
+    Entity cube2 = new Entity(display, "cube.obj", "tex2.png");
 
     cube2.move(0f,-2.1,0f);
 

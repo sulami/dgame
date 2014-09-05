@@ -20,16 +20,15 @@ class Entity
     vec2 uvBuffer[];
     vec3 normalBuffer[];
 
-    this(Display d, Texture t, string path)
+    this(Display d, string modelpath, string texturepath)
     {
-        loadObj(path);
+        loadObj(modelpath);
+        texture = new Texture(texturepath);
 
         display = d;
 
         MatrixID = display.program.getUniformLocation("MVP");
         Model = mat4.identity();
-
-        texture = t;
 
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
