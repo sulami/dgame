@@ -20,7 +20,7 @@ class Display
     vec3 camPos, viewPos, camRight, camUp;
     mat4 Perspective, View;
     ubyte *kb;
-    GLuint VertexArrayID;
+    GLuint VertexArrayID, ViewMatrixID, LightID;
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
@@ -61,6 +61,9 @@ class Display
         setupGL();
         setupShaders();
 
+        ViewMatrixID = program.getUniformLocation("V");
+        LightID = program.getUniformLocation("LightPosition_worldspace");
+
         SDL_ShowCursor(0);
 
         debug {
@@ -83,6 +86,8 @@ class Display
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, bitsPerPixel);
 
         debug {
@@ -187,6 +192,10 @@ class Display
 
         Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
         View = mat4.look_at(camPos, camPos + viewPos, camUp);
+        glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
+
+        vec3 lightPos = vec3(4f, 4f, 4f);
+        glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

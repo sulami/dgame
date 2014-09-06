@@ -11,7 +11,7 @@ import derelict.sdl2.image;
 
 class Texture
 {
-    GLuint textureID;
+    GLuint textureID, samplerID;
     GLsizei width, height;
     GLint internal_format;
     GLenum format, type;

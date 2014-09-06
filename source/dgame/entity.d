@@ -13,8 +13,8 @@ class Entity
 {
     Display display;
     mat4 Model, MVP;
-    GLuint MatrixID;
-    GLuint vertexbuffer, uvbuffer;
+    GLuint MatrixID, ModelMatrixId;
+    GLuint vertexbuffer, uvbuffer, normalbuffer;
     Texture texture;
     vec3 vertexBuffer[];
     vec2 uvBuffer[];
@@ -28,7 +28,11 @@ class Entity
         display = d;
 
         MatrixID = display.program.getUniformLocation("MVP");
+        ModelMatrixId = display.program.getUniformLocation("M");
         Model = mat4.identity();
+
+        texture.samplerID = display.program.getUniformLocation(
+                                                        "TextureSampler");
 
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -38,6 +42,15 @@ class Entity
 
         glGenBuffers(1, &uvbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+        glBufferData(GL_ARRAY_BUFFER,
+                     uvBuffer.length * vec2.sizeof,
+                     uvBuffer.ptr, GL_STATIC_DRAW);
+
+        glGenBuffers(1, &normalbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+        glBufferData(GL_ARRAY_BUFFER,
+                     normalBuffer.length * vec3.sizeof,
+                     normalBuffer.ptr, GL_STATIC_DRAW);
 
         d.addEntity(this);
     }
@@ -106,15 +119,22 @@ class Entity
     void render()
     {
         glBufferData(GL_ARRAY_BUFFER,
+                     vertexBuffer.length * vec3.sizeof,
+                     vertexBuffer.ptr, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,
                      uvBuffer.length * vec2.sizeof,
                      uvBuffer.ptr, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,
+                     normalBuffer.length * vec3.sizeof,
+                     normalBuffer.ptr, GL_STATIC_DRAW);
 
         MVP = display.Perspective * display.View * Model;
         glUniformMatrix4fv(MatrixID, 1, GL_TRUE, &MVP[0][0]);
+        glUniformMatrix4fv(ModelMatrixId, 1, GL_TRUE, &Model[0][0]);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.textureID);
-        glUniform1i(texture.textureID, 0);
+        glUniform1i(texture.samplerID, 0);
 
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -124,10 +144,15 @@ class Entity
         glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
 
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, cast(void *)0);
+
         glDrawArrays(GL_TRIANGLES, 0, cast(int)vertexBuffer.length);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
     }
 
     void rotate(float x, float y, float z)
