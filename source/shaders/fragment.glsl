@@ -14,9 +14,9 @@ uniform vec3 LightPosition_worldspace;
 
 void main()
 {
-    vec3 LightColor = vec3(1f, 1f, 1f);
-    float LightPower = 2.0f;
-    vec3 AmbientLight = vec3(0.1f, 0.1f, 0.1f);
+    vec3 LightColor = vec3(1.0, 1.0, 1.0);
+    float LightPower = 2.0;
+    vec3 AmbientLight = vec3(0.1, 0.1, 0.1);
 
     vec3 MaterialDiffuseColor = texture2D(TextureSampler, UV).rgb;
     vec3 MaterialAmbientColor = AmbientLight * MaterialDiffuseColor;
@@ -25,7 +25,7 @@ void main()
 
     vec3 n = normalize(Normal_cameraspace);
     vec3 l = normalize(LightDirection_cameraspace);
-    float cosTheta = clamp(dot(n, l), 0f, 1f);
+    float cosTheta = clamp(dot(n, l), 0.0, 1.0);
 
     color = MaterialAmbientColor
 
