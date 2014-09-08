@@ -17,19 +17,19 @@ uniform vec3 LightPosition_worldspace;
 
 void main()
 {
-    gl_Position = MVP * vec4(vertexPosition_modelspace, 1f);
-    vec3 Position_worldspace = (M * vec4(vertexPosition_modelspace, 1f)).xyz;
+    gl_Position = MVP * vec4(vertexPosition_modelspace, 1.0);
+    Position_worldspace = (M * vec4(vertexPosition_modelspace, 1.0)).xyz;
 
     vec3 vertexPosition_cameraspace = (V * M * vec4(vertexPosition_modelspace,
-                                                    1f)).xyz;
-    EyeDirection_cameraspace = vec3(0f, 0f, 0f) - vertexPosition_cameraspace;
+                                                    1.0)).xyz;
+    EyeDirection_cameraspace = vec3(0.0) - vertexPosition_cameraspace;
 
-    vec3 LightPosition_cameraspace = (V * vec4(LightPosition_worldspace, 1f))
+    vec3 LightPosition_cameraspace = (V * vec4(LightPosition_worldspace, 1.0))
                                      .xyz;
     LightDirection_cameraspace = LightPosition_cameraspace
                                  + EyeDirection_cameraspace;
 
-    Normal_cameraspace = (V * M * vec4(vertexNormal_modelspace, 0f)).xyz;
+    Normal_cameraspace = (V * M * vec4(vertexNormal_modelspace, 0.0)).xyz;
 
     UV = vertexUV;
 }

@@ -15,13 +15,13 @@ uniform vec3 LightPosition_worldspace;
 void main()
 {
     vec3 LightColor = vec3(1.0, 1.0, 1.0);
-    float LightPower = 2.0;
+    float LightPower = 50.0;
     vec3 AmbientLight = vec3(0.1, 0.1, 0.1);
 
     vec3 MaterialDiffuseColor = texture2D(TextureSampler, UV).rgb;
     vec3 MaterialAmbientColor = AmbientLight * MaterialDiffuseColor;
 
-    float distance = length(LightPosition_worldspace - Position_worldspace);
+    float ldistance = distance(LightPosition_worldspace, Position_worldspace);
 
     vec3 n = normalize(Normal_cameraspace);
     vec3 l = normalize(LightDirection_cameraspace);
@@ -29,8 +29,7 @@ void main()
 
     color = MaterialAmbientColor
 
-            + MaterialDiffuseColor * LightColor * LightPower * cosTheta;
-
-            /* TODO diminishing over distance */
+            + MaterialDiffuseColor * LightColor * LightPower * cosTheta
+            / (ldistance * ldistance);
 }
 
