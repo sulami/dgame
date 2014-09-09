@@ -26,11 +26,7 @@ class Display
     Program program;
     Entity entities[];
 
-    debug {
-        ulong fps = 0;
-        float fps_diff = 0f;
-    }
-    float cur_time = 0f, diff_time = 0f, last_time = 0;
+    float cur_time = 0f, diff_time = 0f, last_time = 0f;
 
     this(int w, int h, float f)
     {
@@ -146,13 +142,7 @@ class Display
         diff_time = (cur_time - last_time) / 1000f;
         last_time = cur_time;
         debug {
-            fps++;
-            fps_diff += diff_time;
-            if (fps_diff >= 1) {
-                fps_diff -= 1;
-                writeln("FPS: ", fps);
-                fps = 0;
-            }
+            writeln(diff_time, "ms");
         }
     }
 
