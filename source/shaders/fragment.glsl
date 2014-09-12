@@ -8,6 +8,7 @@ in vec3 LightDirection_cameraspace;
 
 out vec3 color;
 
+uniform float Time;
 uniform sampler2D TextureSampler;
 uniform mat4 MV;
 uniform vec3 LightPosition_worldspace;

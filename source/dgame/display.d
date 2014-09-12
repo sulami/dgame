@@ -20,13 +20,12 @@ class Display
     vec3 camPos, viewPos, camRight, camUp;
     mat4 Perspective, View;
     ubyte *kb;
-    GLuint VertexArrayID, ViewMatrixID, LightID;
+    GLuint VertexArrayID, ViewMatrixID, TimeID, LightID;
     SDL_Window *window;
     SDL_GLContext context;
     Program program;
     Entity entities[];
-
-    float cur_time = 0f, diff_time = 0f, last_time = 0f;
+    float cur_time, diff_time, last_time;
 
     this(int w, int h, float f)
     {
@@ -57,6 +56,7 @@ class Display
         setupGL();
         setupShaders();
 
+        TimeID = program.getUniformLocation("Time");
         ViewMatrixID = program.getUniformLocation("V");
         LightID = program.getUniformLocation("LightPosition_worldspace");
 
@@ -179,6 +179,7 @@ class Display
     void render()
     {
         measureFPS();
+        glUniform1f(TimeID, cur_time);
 
         Perspective = mat4.perspective(width, height, fov, nearPlane, farPlane);
         View = mat4.look_at(camPos, camPos + viewPos, camUp);

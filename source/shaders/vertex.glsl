@@ -10,6 +10,7 @@ out vec3 Normal_cameraspace;
 out vec3 EyeDirection_cameraspace;
 out vec3 LightDirection_cameraspace;
 
+uniform float Time;
 uniform mat4 MVP;
 uniform mat4 V;
 uniform mat4 M;
