@@ -6,7 +6,7 @@ int main(string[] args)
     Display display = new Display(1024, 768, 45);
 
     Entity cube = new Entity(display, "cube.obj", "wurfel.png");
-    Entity cube2 = new Entity(display, "cube.obj", "tex2.png");
+    Entity cube2 = new Entity(display, "cube.obj", "wurfel.png");
 
     cube2.move(0f,-2.1,0f);
 
