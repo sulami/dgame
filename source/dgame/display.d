@@ -142,7 +142,7 @@ class Display
         diff_time = (cur_time - last_time) / 1000f;
         last_time = cur_time;
         debug {
-            writeln(diff_time, "ms");
+            writef("FPS: %.1f (%.3fms)\r", 1 / diff_time, diff_time);
         }
     }
 
