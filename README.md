@@ -9,3 +9,7 @@ could also be expanded to an actual game some day. Currently it is just
 floating and rotating cubes to fly around and look at.
 
 To build, just run it through `dub`.
+
+It needs `SDL2` and `SDL2_image`, which you should be able to get through your
+distribution's package manager.
+
