@@ -13,3 +13,6 @@ To build, just run it through `dub`.
 It needs `SDL2` and `SDL2_image`, which you should be able to get through your
 distribution's package manager.
 
+What it looks like:
+
+![An image tells more than a thousand words. Well, it's a gif.](http://i.imgur.com/rruhuV2.gif)
